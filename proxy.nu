@@ -1,19 +1,19 @@
 def --env proxy [] {
-    def checkproxy [] {
+    def checkproxy [] bool {
         try {
             $env.http_proxy; $env.https_proxy; $env.all_proxy
-            echo 0
+            true
         } catch {
-            echo 1
+            false
         }
     }
 
     match (checkproxy) {
-        0 => {
+        true => {
             hide-env http_proxy https_proxy all_proxy
             echo "Proxy removed"
         },
-        1 => {
+        false => {
             $env.http_proxy = "http://127.0.0.1:7897"
             $env.https_proxy = "http://127.0.0.1:7897"
             $env.all_proxy = "socks5://127.0.0.1:7897"
